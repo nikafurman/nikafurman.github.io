@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Frame Scene with Textures</title>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+</head>
+<body>
+    <a-scene>
+        <!-- Элемент неба с текстурой -->
+        <a-sky src="https://maxtextures.ru/assets/images/resources/16/0c23605828daa3962d44406ef72e0faa.jpg"></a-sky>
+
+        <!-- Элемент пола с текстурой -->
+        <a-plane rotation="-90 0 0" position="0 0 0" width="1000" height="1000"
+                 src="https://cdn.pixabay.com/photo/2020/08/04/00/04/grass-5467605_1280.jpg" repeat="100 100">
+        </a-plane>
+    </a-scene>
+</body>
+</html>
