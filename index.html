@@ -3,17 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A-Frame Scene with Textures</title>
+    <title>A-Frame Scene with Camera and Controls</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
 </head>
 <body>
     <a-scene>
-        <!-- Элемент неба с текстурой -->
+        <!-- Sky with texture -->
         <a-sky src="skyy.png"></a-sky>
 
-        <!-- Элемент пола с текстурой -->
+        <!-- Ground with texture -->
         <a-plane rotation="-90 0 0" position="0 0 0" width="1000" height="1000" src="travi.jpg" repeat="100 100">
         </a-plane>
+
+       <!-- Camera with controls -->
+        <a-camera>
+          <a-entity cursor="fuse: true; fuseTimeout: 500"
+                    position="0 0 -1"
+                    geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+                    material="color: black; shader: flat">
+          </a-entity>
+        </a-camera>
     </a-scene>
 </body>
 </html>
