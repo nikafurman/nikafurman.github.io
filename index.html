@@ -16,7 +16,7 @@
 
         <!-- Camera with controls -->
          <a-camera>
-            <a-entity cursor="fuse: true; fuseTimeout: 500"
+            <a-entity id="cursor" cursor="fuse: true; fuseTimeout: 500"
                       position="0 0 -1"
                       geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
                       material="color: black; shader: flat">
@@ -37,18 +37,20 @@
         <a-entity id="cube3" geometry="primitive: box; width: 2; height: 2; depth: 2" material="color: orange" position="-15 1 0" class="collectible" collectible></a-entity>
     </a-scene>
     <script>
-        let score = 0;
+         let score = 0;
         const scoreText = document.getElementById('scoreText');
+        const cursor = document.getElementById('cursor');
+
 
         AFRAME.registerComponent('collectible', {
             init: function () {
-                this.el.addEventListener('mouseenter', () => {
-                   score++;
-                   scoreText.setAttribute('text', `value: Score: ${score}; align: center; color: black;`);
-                   this.el.parentNode.removeChild(this.el);
-               });
-            },
-        });
+              this.el.addEventListener('click',  () => {
+                 score++;
+                 scoreText.setAttribute('text', `value: Score: ${score}; align: center; color: black;`);
+                 this.el.parentNode.removeChild(this.el);
+                })
+            }
+         });
     </script>
 </body>
 </html>
