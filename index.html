@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A-Frame Scene with Collectibles and Score</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/donmccaslin/aframe-physics-system/master/dist/aframe-physics-system.min.js"></script>
 </head>
 <body>
-    <a-scene>
+    <a-scene physics>
         <!-- Sky with texture -->
         <a-sky src="skyy.png"></a-sky>
 
         <!-- Ground with texture -->
-        <a-plane rotation="-90 0 0" position="0 0 0" width="1000" height="1000" src="travi.jpg" repeat="100 100"></a-plane>
+        <a-plane rotation="-90 0 0" position="0 0 0" width="1000" height="1000" src="travi.jpg" repeat="100 100" static-body></a-plane>
 
         <!-- Camera with controls -->
-        <a-camera id="camera">
+        <a-camera id="camera" position="0 1.6 0">
             <a-entity cursor="fuse: true; fuseTimeout: 500"
                       position="0 0 -1"
                       geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
@@ -24,14 +25,14 @@
         </a-camera>
 
         <!-- Collectible Spheres -->
-        <a-entity id="sphere1" geometry="primitive: sphere; radius: 1" material="color: red" position="-5 2 -5" class="collectible" collectible></a-entity>
-        <a-entity id="sphere2" geometry="primitive: sphere; radius: 1" material="color: blue" position="5 2 5" class="collectible" collectible></a-entity>
-        <a-entity id="sphere3" geometry="primitive: sphere; radius: 1" material="color: green" position="0 2 10" class="collectible" collectible></a-entity>
+        <a-entity id="sphere1" geometry="primitive: sphere; radius: 0.5" material="color: red" position="-5 0.5 -5" class="collectible" dynamic-body></a-entity>
+        <a-entity id="sphere2" geometry="primitive: sphere; radius: 0.5" material="color: blue" position="5 0.5 5" class="collectible" dynamic-body></a-entity>
+        <a-entity id="sphere3" geometry="primitive: sphere; radius: 0.5" material="color: green" position="0 0.5 10" class="collectible" dynamic-body></a-entity>
 
         <!-- Collectible Cubes -->
-        <a-entity id="cube1" geometry="primitive: box; width: 2; height: 2; depth: 2" material="color: yellow" position="10 1 -10" class="collectible" collectible></a-entity>
-        <a-entity id="cube2" geometry="primitive: box; width: 2; height: 2; depth: 2" material="color: purple" position="-10 1 10" class="collectible" collectible></a-entity>
-        <a-entity id="cube3" geometry="primitive: box; width: 2; height: 2; depth: 2" material="color: orange" position="-15 1 0" class="collectible" collectible></a-entity>
+        <a-entity id="cube1" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: yellow" position="10 0.5 -10" class="collectible" dynamic-body></a-entity>
+        <a-entity id="cube2" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: purple" position="-10 0.5 10" class="collectible" dynamic-body></a-entity>
+        <a-entity id="cube3" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: orange" position="-15 0.5 0" class="collectible" dynamic-body></a-entity>
 
         <!-- Scoreboard -->
         <a-text id="scoreboard" value="Score: 0" position="-1 3 -4" color="#FFF" width="2"></a-text>
@@ -54,27 +55,10 @@
             },
         });
 
-        // Adding collision detection to camera
-        AFRAME.registerComponent('camera-collision', {
-            init: function () {
-                const camera = this.el;
-                const collectibles = document.querySelectorAll('.collectible');
-
-                camera.addEventListener('collide', (event) => {
-                    collectibles.forEach((collectible) => {
-                        if (event.detail.body.el.id === collectible.id) {
-                            score += 1; // Increase score by 1
-                            document.getElementById('scoreboard').setAttribute('value', `Score: ${score}`); // Update scoreboard
-                            console.log("Collected: ", collectible.id);
-                            collectible.parentNode.removeChild(collectible); // Remove the collectible from the scene
-                        }
-                    });
-                });
-            },
+        // Attach collectible component to each collectible entity
+        document.querySelectorAll('.collectible').forEach((el) => {
+            el.setAttribute('collectible', '');
         });
-
-        // Attach the camera collision component to the camera
-        document.querySelector('#camera').setAttribute('camera-collision', '');
     </script>
 </body>
 </html>
