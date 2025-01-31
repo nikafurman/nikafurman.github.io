@@ -15,7 +15,7 @@
         <a-plane rotation="-90 0 0" position="0 0 0" width="1000" height="1000" src="travi.jpg" repeat="100 100"></a-plane>
 
         <!-- Camera with controls -->
-        <a-camera>
+        <a-camera id="camera">
             <a-entity cursor="fuse: true; fuseTimeout: 500"
                       position="0 0 -1"
                       geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
@@ -43,14 +43,38 @@
 
         AFRAME.registerComponent('collectible', {
             init: function () {
-                this.el.addEventListener('mouseenter', () => {
-                    score += 1; // Increase score by 1
-                    document.getElementById('scoreboard').setAttribute('value', `Score: ${score}`); // Update scoreboard
-                    console.log("Collected: ", this.el.id);
-                    this.el.parentNode.removeChild(this.el); // Remove the collectible from the scene
+                this.el.addEventListener('collide', (event) => {
+                    if (event.detail.body.el.id === 'camera') {
+                        score += 1; // Increase score by 1
+                        document.getElementById('scoreboard').setAttribute('value', `Score: ${score}`); // Update scoreboard
+                        console.log("Collected: ", this.el.id);
+                        this.el.parentNode.removeChild(this.el); // Remove the collectible from the scene
+                    }
                 });
             },
         });
+
+        // Adding collision detection to camera
+        AFRAME.registerComponent('camera-collision', {
+            init: function () {
+                const camera = this.el;
+                const collectibles = document.querySelectorAll('.collectible');
+
+                camera.addEventListener('collide', (event) => {
+                    collectibles.forEach((collectible) => {
+                        if (event.detail.body.el.id === collectible.id) {
+                            score += 1; // Increase score by 1
+                            document.getElementById('scoreboard').setAttribute('value', `Score: ${score}`); // Update scoreboard
+                            console.log("Collected: ", collectible.id);
+                            collectible.parentNode.removeChild(collectible); // Remove the collectible from the scene
+                        }
+                    });
+                });
+            },
+        });
+
+        // Attach the camera collision component to the camera
+        document.querySelector('#camera').setAttribute('camera-collision', '');
     </script>
 </body>
 </html>
