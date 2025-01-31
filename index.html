@@ -48,11 +48,17 @@
             text="value: Time: 60; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json">
         </a-entity>
 
-        <!-- Game Over Text-->
-         <a-entity id="gameOverText" position="0 2 -5"
+       <!-- Game Over Text-->
+        <a-entity id="gameOverText" position="0 2 -5"
             geometry="primitive: plane; width: 4; height: 1"
             material="color: black; opacity: 0.7"
-            text="value: GAME OVER; color: red; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json; visible: false">
+            text="value: GAME OVER; color: red; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json; visible: false" visible="false">
+        </a-entity>
+         <!-- Final Score Text-->
+        <a-entity id="finalScoreText" position="0 1 -5"
+            geometry="primitive: plane; width: 4; height: 1"
+            material="color: black; opacity: 0.7"
+            text="value: Score: 0; color: white; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json; visible: false" visible="false">
         </a-entity>
 
     </a-scene>
@@ -63,14 +69,17 @@
       let timeLeft = 60;
       const timerElement = document.getElementById('timer');
        const gameOverText = document.getElementById('gameOverText');
+       const finalScoreText = document.getElementById('finalScoreText');
       let gameStarted = false;
       let timerInterval;
+
 
       function updateTimer() {
         timerElement.setAttribute('text', `value: Time: ${timeLeft}; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json`);
          if (timeLeft <= 0) {
            clearInterval(timerInterval);
            gameOverText.setAttribute('text', 'visible: true')
+            finalScoreText.setAttribute('text', `value: Final Score: ${score}; visible: true; color: white; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json`)
             document.querySelectorAll('.collectible').forEach(el => {
               el.parentNode.removeChild(el);
             });
@@ -78,6 +87,7 @@
             timeLeft--;
          }
       }
+
 
 
          AFRAME.registerComponent('collectible', {
