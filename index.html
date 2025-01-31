@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A-Frame Scene with Timer and Game End</title>
+    <title>A-Frame Scene with Timer, Game End, and Restart</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/donmccaslin/aframe-physics-system/master/dist/aframe-physics-system.min.js"></script>
 </head>
@@ -61,6 +61,15 @@
             text="value: Score: 0; color: white; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json; visible: false" visible="false">
         </a-entity>
 
+        <!-- Restart Button -->
+        <a-entity id="restartButton"
+              geometry="primitive: box; width: 1.5; height: 0.5; depth: 0.1"
+              material="color: gray"
+              position="0 -1 -5"
+              text="value: Restart; align: center; color: white; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json"
+              clickable>
+         </a-entity>
+
     </a-scene>
 
     <script>
@@ -68,10 +77,98 @@
       const scoreboard = document.getElementById('scoreboard');
       let timeLeft = 60;
       const timerElement = document.getElementById('timer');
-       const finalScoreText = document.getElementById('finalScoreText');
+      const gameOverText = document.getElementById('gameOverText');
+      const finalScoreText = document.getElementById('finalScoreText');
       let gameStarted = false;
       let timerInterval;
+      const restartButton = document.getElementById('restartButton');
 
+      function resetGame() {
+            score = 0;
+            timeLeft = 60;
+            gameStarted = false;
+            scoreboard.setAttribute('text', 'value: 0; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json');
+            timerElement.setAttribute('text', `value: Time: 60; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json`);
+            gameOverText.setAttribute('text', 'visible: false');
+            finalScoreText.setAttribute('text', 'value: Score: 0; visible: false; color: white; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json');
+            clearInterval(timerInterval);
+
+            // Remove existing collectibles
+            document.querySelectorAll('.collectible').forEach(el => {
+                el.parentNode.removeChild(el);
+            });
+            // Create collectibles again
+            createCollectibles();
+        }
+
+      function createCollectibles(){
+           const scene = document.querySelector('a-scene');
+
+            const sphere1 = document.createElement('a-entity');
+            sphere1.setAttribute('id', 'sphere1');
+            sphere1.setAttribute('geometry', 'primitive: sphere; radius: 0.5');
+            sphere1.setAttribute('material', 'color: red');
+            sphere1.setAttribute('position', '-5 0.5 -5');
+            sphere1.setAttribute('class', 'collectible');
+            sphere1.setAttribute('dynamic-body', '');
+            sphere1.setAttribute('collectible', '');
+            scene.appendChild(sphere1);
+
+
+             const sphere2 = document.createElement('a-entity');
+            sphere2.setAttribute('id', 'sphere2');
+            sphere2.setAttribute('geometry', 'primitive: sphere; radius: 0.5');
+            sphere2.setAttribute('material', 'color: blue');
+            sphere2.setAttribute('position', '5 0.5 5');
+             sphere2.setAttribute('class', 'collectible');
+            sphere2.setAttribute('dynamic-body', '');
+             sphere2.setAttribute('collectible', '');
+           scene.appendChild(sphere2);
+
+
+             const sphere3 = document.createElement('a-entity');
+            sphere3.setAttribute('id', 'sphere3');
+            sphere3.setAttribute('geometry', 'primitive: sphere; radius: 0.5');
+            sphere3.setAttribute('material', 'color: green');
+            sphere3.setAttribute('position', '0 0.5 10');
+             sphere3.setAttribute('class', 'collectible');
+            sphere3.setAttribute('dynamic-body', '');
+             sphere3.setAttribute('collectible', '');
+           scene.appendChild(sphere3);
+
+
+            const cube1 = document.createElement('a-entity');
+            cube1.setAttribute('id', 'cube1');
+            cube1.setAttribute('geometry', 'primitive: box; width: 1; height: 1; depth: 1');
+            cube1.setAttribute('material', 'color: yellow');
+            cube1.setAttribute('position', '10 0.5 -10');
+            cube1.setAttribute('class', 'collectible');
+            cube1.setAttribute('dynamic-body', '');
+             cube1.setAttribute('collectible', '');
+            scene.appendChild(cube1);
+
+
+             const cube2 = document.createElement('a-entity');
+            cube2.setAttribute('id', 'cube2');
+             cube2.setAttribute('geometry', 'primitive: box; width: 1; height: 1; depth: 1');
+            cube2.setAttribute('material', 'color: purple');
+             cube2.setAttribute('position', '-10 0.5 10');
+            cube2.setAttribute('class', 'collectible');
+           cube2.setAttribute('dynamic-body', '');
+            cube2.setAttribute('collectible', '');
+            scene.appendChild(cube2);
+
+
+            const cube3 = document.createElement('a-entity');
+             cube3.setAttribute('id', 'cube3');
+             cube3.setAttribute('geometry', 'primitive: box; width: 1; height: 1; depth: 1');
+            cube3.setAttribute('material', 'color: orange');
+             cube3.setAttribute('position', '-15 0.5 0');
+           cube3.setAttribute('class', 'collectible');
+            cube3.setAttribute('dynamic-body', '');
+            cube3.setAttribute('collectible', '');
+            scene.appendChild(cube3);
+        }
 
       function updateTimer() {
         timerElement.setAttribute('text', `value: Time: ${timeLeft}; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json`);
@@ -87,6 +184,15 @@
          }
       }
 
+        restartButton.addEventListener('click', resetGame);
+
+        AFRAME.registerComponent('clickable', {
+            init: function () {
+                this.el.addEventListener('click', () => {
+                    this.el.emit('click');
+                });
+            }
+         });
 
 
          AFRAME.registerComponent('collectible', {
@@ -105,6 +211,7 @@
              });
            },
          });
+
 
 
        document.querySelectorAll('.collectible').forEach((el) => {
