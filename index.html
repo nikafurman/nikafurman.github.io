@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A-Frame Scene with Collectibles and Score</title>
+    <title>A-Frame Scene with Timer and Game End</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/donmccaslin/aframe-physics-system/master/dist/aframe-physics-system.min.js"></script>
 </head>
@@ -15,7 +15,7 @@
         <!-- Ground with texture -->
         <a-plane rotation="-90 0 0" position="0 0 0" width="1000" height="1000" src="travi.jpg" repeat="100 100" static-body></a-plane>
 
-        <!-- Camera with controls -->
+       <!-- Camera with controls -->
         <a-camera id="camera" position="0 1.6 0">
             <a-entity cursor="fuse: true; fuseTimeout: 500"
                       position="0 0 -1"
@@ -35,34 +35,70 @@
         <a-entity id="cube3" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: orange" position="-15 0.5 0" class="collectible" dynamic-body></a-entity>
 
         <!-- Scoreboard -->
-        <a-entity id="scoreboard" position="-1 3 -4"
+         <a-entity id="scoreboard" position="-1 3 -4"
             geometry="primitive: plane; width: 2.2; height: 0.7"
             material="color: black"
-            text="value: Score: 0; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json">
+            text="value: 0; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json">
         </a-entity>
+
+        <!-- Timer -->
+         <a-entity id="timer" position="1 3 -4"
+            geometry="primitive: plane; width: 2.2; height: 0.7"
+            material="color: black"
+            text="value: Time: 60; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json">
+        </a-entity>
+
+        <!-- Game Over Text-->
+         <a-entity id="gameOverText" position="0 2 -5"
+            geometry="primitive: plane; width: 4; height: 1"
+            material="color: black; opacity: 0.7"
+            text="value: GAME OVER; color: red; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json; visible: false">
+        </a-entity>
+
     </a-scene>
 
     <script>
-        // Score variable
-        let score = 0;
-        const scoreboard = document.getElementById('scoreboard');
+      let score = 0;
+      const scoreboard = document.getElementById('scoreboard');
+      let timeLeft = 60; // Set the initial timer value (in seconds)
+      const timerElement = document.getElementById('timer');
+      const gameOverText = document.getElementById('gameOverText');
 
-        AFRAME.registerComponent('collectible', {
-            init: function () {
-                this.el.addEventListener('collide', (event) => {
-                    if (event.detail.body.el.id === 'camera') {
-                        score += 1;
-                         scoreboard.setAttribute('text', `value: ${score}; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json`);
-                        console.log("Collected: ", this.el.id);
-                        this.el.parentNode.removeChild(this.el);
-                    }
-                });
-            },
-        });
+      function updateTimer() {
+        timerElement.setAttribute('text', `value: Time: ${timeLeft}; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json`);
+         if (timeLeft <= 0) {
+            // Stop the timer
+           clearInterval(timerInterval);
+           gameOverText.setAttribute('text', 'visible: true')
+            // Remove collectible elements
+            document.querySelectorAll('.collectible').forEach(el => {
+              el.parentNode.removeChild(el);
+            });
+         } else {
+            timeLeft--; // Decrease the timer every second
+         }
+      }
 
-        document.querySelectorAll('.collectible').forEach((el) => {
-            el.setAttribute('collectible', '');
-        });
+        // Start timer interval
+       let timerInterval = setInterval(updateTimer, 1000);
+
+
+         AFRAME.registerComponent('collectible', {
+           init: function () {
+             this.el.addEventListener('collide', (event) => {
+               if (event.detail.body.el.id === 'camera' && timeLeft > 0) {
+                 score += 1;
+                 scoreboard.setAttribute('text', `value: ${score}; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json`);
+                 console.log("Collected: ", this.el.id);
+                 this.el.parentNode.removeChild(this.el);
+               }
+             });
+           },
+         });
+
+       document.querySelectorAll('.collectible').forEach((el) => {
+          el.setAttribute('collectible', '');
+       });
     </script>
 </body>
 </html>
