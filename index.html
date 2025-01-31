@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A-Frame Scene with Timer, Game End, and Restart</title>
+    <title>A-Frame Scene with Custom Model</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/donmccaslin/aframe-physics-system/master/dist/aframe-physics-system.min.js"></script>
 </head>
@@ -34,7 +34,7 @@
         <a-entity id="cube2" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: purple" position="-10 0.5 10" class="collectible" dynamic-body></a-entity>
         <a-entity id="cube3" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: orange" position="-15 0.5 0" class="collectible" dynamic-body></a-entity>
 
-         <!-- Scoreboard -->
+        <!-- Scoreboard -->
          <a-entity id="scoreboard" position="-1 3 -4"
             geometry="primitive: plane; width: 2.2; height: 0.7"
             material="color: black"
@@ -69,6 +69,14 @@
               text="value: Restart; align: center; color: white; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json"
               clickable>
          </a-entity>
+        
+         <!-- Custom Model -->
+        <a-entity
+            gltf-model="url(rantai.glb)"
+            position="0 1 -8"
+            rotation="0 45 0"
+            scale="0.5 0.5 0.5">
+        </a-entity>
 
     </a-scene>
 
@@ -145,10 +153,7 @@
             cube1.setAttribute('class', 'collectible');
             cube1.setAttribute('dynamic-body', '');
              cube1.setAttribute('collectible', '');
-            scene.appendChild(cube1);
-
-
-             const cube2 = document.createElement('a-entity');
+            scene.appendChild(cube1);... const cube2 = document.createElement('a-entity');
             cube2.setAttribute('id', 'cube2');
              cube2.setAttribute('geometry', 'primitive: box; width: 1; height: 1; depth: 1');
             cube2.setAttribute('material', 'color: purple');
