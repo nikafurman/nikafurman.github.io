@@ -44,26 +44,24 @@
             material="color: black"
             text="value: Time: 60; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json">
         </a-entity>
-        <!-- Game Over Text -->
-        <a-entity id="gameOverText" position="0 2 -5"
-            geometry="primitive: plane; width: 4; height: 1"
-            material="color: black; opacity: 0.7"
-            text="value: GAME OVER; color: red; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json; visible:false">
-        </a-entity>
-        <!-- Final Score Text -->
-        <a-entity id="finalScoreText" position="0 1 -5"
-            geometry="primitive: plane; width: 4; height: 1"
-            material="color: black; opacity: 0.7"
-            text="value: Score : 0 ; color : white ; align : center ; width :3 ; font : https://cdn.aframe.io/fonts/Roboto-msdf.json ; visible : false">
-        </a-entity>
-        <!-- Restart Button -->
-        <a-entity id="restartButton"
-            geometry="primitive: box; width: 1.5; height: 0.5; depth: 0.1"
-            material="color: gray"
-            position="0 0 -5"
-            text="value: Restart; align: center; color: white; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json"
-            clickable="on: click"
-            visible="false">
+        <!-- Game Over Container -->
+        <a-entity id="gameOverContainer" position="0 1 -5" visible="false">
+            <!-- Background -->
+            <a-plane position="0 0 0" width="4" height="2" color="black" opacity="0.7"></a-plane>
+            <!-- Game Over Text -->
+            <a-entity id="gameOverText" position="0 0.5 0.1"
+                text="value: GAME OVER; color: red; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json">
+            </a-entity>
+            <!-- Final Score Text -->
+            <a-entity id="finalScoreText" position="0 -0.1 0.1"
+                text="value: Score: 0; color: white; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json">
+            </a-entity>
+            <!-- Restart Button -->
+            <a-entity id="restartButton" geometry="primitive: box; width: 1.5; height: 0.5; depth: 0.1"
+                material="color: gray" position="0 -0.8 0.1"
+                text="value: Restart; align: center; color: white; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json"
+                clickable="on: click">
+            </a-entity>
         </a-entity>
     </a-scene>
     <script>
@@ -104,13 +102,12 @@
       function endGame() {
           let finalScore = parseInt(document.querySelector('#scoreboard').getAttribute('text').value.split(': ')[1]);
 
-          // Показываем текст "Game Over" и финальный счет
-          document.querySelector('#gameOverText').setAttribute('visible', true);
+          // Показываем контейнер "Game Over"
+          const gameOverContainer = document.querySelector('#gameOverContainer');
+          gameOverContainer.setAttribute('visible', true);
           document.querySelector('#finalScoreText').setAttribute('text', 'value', `Score: ${finalScore}`);
-          document.querySelector('#finalScoreText').setAttribute('visible', true);
 
-          // Показываем кнопку "Restart"
-          document.querySelector('#restartButton').setAttribute('visible', true);
+          // Добавляем обработчик для кнопки "Restart"
           document.querySelector('#restartButton').addEventListener('click', () => {
               location.reload();
           });
