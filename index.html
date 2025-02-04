@@ -62,8 +62,8 @@
         </a-entity>
 
         <!-- Final Score Text -->
-        <a-entity id="finalScoreText" position="-1 .5 -5"
-            geometry="primitive: plane; width: 4; height: .7"
+        <a-entity id="finalScoreText" position="-1 1 -5"
+            geometry="primitive: plane; width: 4; height: 1"
             material="color: black; opacity: 0.7"
             text="
                 value : Score : 0 ; color : white ; align : center ; width :3 ; font : https://cdn.aframe.io/fonts/Roboto-msdf.json ; visible:false">
@@ -83,8 +83,7 @@
                 align : center ;
                 color : white ;
                 width :2 ;
-                font : https://cdn.aframe.io/fonts/Roboto-msdf.json "
-            visible = "false">
+                font : https://cdn.aframe.io/fonts/Roboto-msdf.json ">
         </a-entity>
 
     </a-scene>
@@ -109,7 +108,7 @@
 
       // Функция завершения игры
       function endGame() {
-          // Показываем текст "Game Over"
+          alert('Game over! Your final score is:' + score);
           document.querySelector('#gameOverText').setAttribute('visible', true);
           document.querySelector('#finalScoreText').setAttribute('text', 'value', 'Score:' + score);
           document.querySelector('#finalScoreText').setAttribute('visible', true);
@@ -123,6 +122,7 @@
           collectible.setAttribute('material', 'color:red');
           collectible.setAttribute('position', position);
           collectible.setAttribute('class', 'collectible');
+          collectible.setAttribute('clickable', '');
           
           // Добавляем обработчик событий для сбора объекта
           collectible.addEventListener('click', () => {
@@ -141,33 +141,12 @@
           '5 0.5 -5',
           '-10 0.5 -10',
           '10 0.5 -10',
-          '-15 .5 -15'
+          '15 .5 -15'
       ];
       
       positions.forEach(pos => {
           const collectible = createCollectible(pos);
           document.querySelector('a-scene').appendChild(collectible);
-      });
-
-      // Обработчик события для перезапуска игры
-      document.querySelector('#restartButton').addEventListener('click', () => {
-          score = 0;
-          timeLeft = 60;
-          scoreboard.setAttribute('text', 'value', 'Score:' + score);
-          timerElement.setAttribute('text', 'value', 'Time:' + timeLeft);
-          
-          // Скрываем текст Game Over и финальный счет
-          document.querySelector('#gameOverText').setAttribute('visible', false);
-          document.querySelector('#finalScoreText').setAttribute('visible', false);
-          
-          // Убираем кнопку перезапуска
-          document.querySelector('#restartButton').setAttribute('visible', false);
-
-          // Пересоздаем collectibles
-          positions.forEach(pos => {
-              const collectible = createCollectible(pos);
-              document.querySelector('a-scene').appendChild(collectible);
-          });
       });
 
     </script>
