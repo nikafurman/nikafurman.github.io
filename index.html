@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A-Frame Scene with Custom Model</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/donmccaslin/aframe-physics-system/master/dist/aframe-physics-system.min.js"></script>
 </head>
 <body>
-    <a-scene physics>
+    <a-scene>
         <!-- Sky with texture -->
         <a-sky src="skyy.png"></a-sky>
 
         <!-- Ground with texture -->
-        <a-plane rotation="-90 0 0" position="0 0 0" width="1000" height="1000" src="travi.jpg" repeat="100 100" static-body></a-plane>
+        <a-plane rotation="-90 0 0" position="0 0 0" width="1000" height="1000" src="travi.jpg" repeat="100 100"></a-plane>
 
-       <!-- Camera with controls -->
+        <!-- Camera with controls -->
         <a-camera id="camera" position="0 1.6 0">
             <a-entity cursor="fuse: true; fuseTimeout: 500"
                       position="0 0 -1"
@@ -25,91 +24,102 @@
         </a-camera>
 
         <!-- Collectible Spheres -->
-        <a-entity id="sphere1" geometry="primitive: sphere; radius: 0.5" material="color: red" position="-5 0.5 -5" class="collectible" dynamic-body></a-entity>
-        <a-entity id="sphere2" geometry="primitive: sphere; radius: 0.5" material="color: blue" position="5 0.5 5" class="collectible" dynamic-body></a-entity>
-        <a-entity id="sphere3" geometry="primitive: sphere; radius: 0.5" material="color: green" position="0 0.5 10" class="collectible" dynamic-body></a-entity>
+        <a-entity id="sphere1" geometry="primitive: sphere; radius: 0.5" material="color: red" position="-5 0.5 -5" class="collectible"></a-entity>
+        <a-entity id="sphere2" geometry="primitive: sphere; radius: 0.5" material="color: blue" position="5 0.5 5" class="collectible"></a-entity>
+        <a-entity id="sphere3" geometry="primitive: sphere; radius: 0.5" material="color: green" position="0 0.5 10" class="collectible"></a-entity>
 
         <!-- Collectible Cubes -->
-        <a-entity id="cube1" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: yellow" position="10 0.5 -10" class="collectible" dynamic-body></a-entity>
-        <a-entity id="cube2" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: purple" position="-10 0.5 10" class="collectible" dynamic-body></a-entity>
-        <a-entity id="cube3" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: orange" position="-15 0.5 0" class="collectible" dynamic-body></a-entity>
+        <a-entity id="cube1" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: yellow" position="10 0.5 -10" class="collectible"></a-entity>
+        <a-entity id="cube2" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: purple" position="-10 0.5 10" class="collectible"></a-entity>
+        <a-entity id="cube3" geometry="primitive: box; width: 1; height: 1; depth: 1" material="color: orange" position="-15 0.5 0" class="collectible"></a-entity>
 
         <!-- Scoreboard -->
-         <a-entity id="scoreboard" position="-1 3 -4"
+        <a-entity id="scoreboard" position="-1 3 -4"
             geometry="primitive: plane; width: 2.2; height: 0.7"
             material="color: black"
-            text="value: 0; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json">
+            text="value: Score: 0; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json">
         </a-entity>
 
         <!-- Timer -->
-         <a-entity id="timer" position="1 3 -4"
+        <a-entity id="timer" position="1 3 -4"
             geometry="primitive: plane; width: 2.2; height: 0.7"
             material="color: black"
             text="value: Time: 60; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json">
         </a-entity>
 
-       <!-- Game Over Text-->
+        <!-- Game Over Text -->
         <a-entity id="gameOverText" position="0 2 -5"
             geometry="primitive: plane; width: 4; height: 1"
             material="color: black; opacity: 0.7"
-            text="value: GAME OVER; color: red; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json; visible: false" visible="false">
+            text="value: GAME OVER; color: red; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json; visible: false">
         </a-entity>
-         <!-- Final Score Text-->
+
+        <!-- Final Score Text -->
         <a-entity id="finalScoreText" position="0 1 -5"
             geometry="primitive: plane; width: 4; height: 1"
             material="color: black; opacity: 0.7"
-            text="value: Score: 0; color: white; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json; visible: false" visible="false">
+            text="value: Score: 0; color: white; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json; visible: false">
         </a-entity>
 
         <!-- Restart Button -->
         <a-entity id="restartButton"
-              geometry="primitive: box; width: 1.5; height: 0.5; depth: 0.1"
-              material="color: gray"
-              position="0 -1 -5"
-              text="value: Restart; align: center; color: white; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json"
-              clickable>
-         </a-entity>
-        
-         <!-- Custom Model -->
+            geometry="primitive: box; width: 1.5; height: 0.5; depth: 0.1"
+            material="color: gray"
+            position="0 -1 -5"
+            text="value: Restart; align: center; color: white; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json"
+            clickable>
+        </a-entity>
+
+        <!-- Custom Model -->
         <a-entity
             gltf-model="url(siberian.glb)"
             position="0 1 -8"
             rotation="0 45 0"
             scale="0.5 0.5 0.5">
         </a-entity>
-
     </a-scene>
 
-<script>
-    AFRAME.registerComponent('collectible', {
-        init: function () {
-            this.el.addEventListener('click', () => {
-                this.el.parentNode.removeChild(this.el);
-                let scoreElement = document.querySelector('[text_value="Score: "]');
-                let score = parseInt(scoreElement.getAttribute('text').value.split(': ')[1]) + 1;
-                scoreElement.setAttribute('text', 'value', 'Score: ' + score);
-            });
-
-            let timeLeft = 60; // Время игры в секундах
-            let timerElement = document.querySelector('#timer');
-
-            function updateTimer() {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    timerElement.setAttribute('text', 'value', 'Time: ' + timeLeft);
-                } else {
-                    endGame();
-                }
+    <script>
+        AFRAME.registerComponent('collectible', {
+            init: function () {
+                // Обработка наведения
+                this.el.addEventListener('mouseenter', () => {
+                    this.el.parentNode.removeChild(this.el); // Удаляем объект
+                    let scoreElement = document.querySelector('#scoreboard');
+                    let score = parseInt(scoreElement.getAttribute('text', 'value').split(': ')[1]) + 1;
+                    scoreElement.setAttribute('text', 'value', 'Score: ' + score); // Обновляем счет
+                });
             }
+        });
 
-            setInterval(updateTimer, 1000);
+        let timeLeft = 60; // Время игры в секундах
+        let timerElement = document.querySelector('#timer');
+
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                timerElement.setAttribute('text', 'value', 'Time: ' + timeLeft); // Обновляем таймер
+            } else {
+                endGame(); // Завершаем игру
+            }
         }
-    });
 
-    function endGame() {
-        // Логика завершения игры
-        alert("Время вышло!");
-    }
-</script>
+        setInterval(updateTimer, 1000); // Запускаем таймер
+
+        function endGame() {
+            let finalScore = parseInt(document.querySelector('#scoreboard').getAttribute('text', 'value').split(': ')[1]);
+            alert('Game over! Your final score is: ' + finalScore);
+
+            // Показываем текст "Game Over" и финальный счет
+            document.querySelector('#gameOverText').setAttribute('visible', true);
+            document.querySelector('#finalScoreText').setAttribute('text', 'value', 'Score: ' + finalScore);
+            document.querySelector('#finalScoreText').setAttribute('visible', true);
+
+            // Перезагрузка страницы (опционально)
+            document.querySelector('#restartButton').addEventListener('click', () => {
+                location.reload();
+            });
+        }
+    </script>
 </body>
 </html>
