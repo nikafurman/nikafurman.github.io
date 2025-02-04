@@ -80,148 +80,36 @@
 
     </a-scene>
 
-    <script>
-      let score = 0;
-      const scoreboard = document.getElementById('scoreboard');
-      let timeLeft = 60;
-      const timerElement = document.getElementById('timer');
-      const gameOverText = document.getElementById('gameOverText');
-      const finalScoreText = document.getElementById('finalScoreText');
-      let gameStarted = false;
-      let timerInterval;
-      const restartButton = document.getElementById('restartButton');
-
-      function resetGame() {
-            score = 0;
-            timeLeft = 60;
-            gameStarted = false;
-            scoreboard.setAttribute('text', 'value: 0; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json');
-            timerElement.setAttribute('text', `value: Time: 60; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json`);
-            gameOverText.setAttribute('text', 'visible: false');
-            finalScoreText.setAttribute('text', 'value: Score: 0; visible: false; color: white; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json');
-            clearInterval(timerInterval);
-
-            // Remove existing collectibles
-            document.querySelectorAll('.collectible').forEach(el => {
-                el.parentNode.removeChild(el);
+<script>
+    AFRAME.registerComponent('collectible', {
+        init: function () {
+            this.el.addEventListener('click', () => {
+                this.el.parentNode.removeChild(this.el);
+                let scoreElement = document.querySelector('[text_value="Score: "]');
+                let score = parseInt(scoreElement.getAttribute('text').value.split(': ')[1]) + 1;
+                scoreElement.setAttribute('text', 'value', 'Score: ' + score);
             });
-            // Create collectibles again
-            createCollectibles();
-        }
 
-      function createCollectibles(){
-           const scene = document.querySelector('a-scene');
+            let timeLeft = 60; // Время игры в секундах
+            let timerElement = document.querySelector('#timer');
 
-            const sphere1 = document.createElement('a-entity');
-            sphere1.setAttribute('id', 'sphere1');
-            sphere1.setAttribute('geometry', 'primitive: sphere; radius: 0.5');
-            sphere1.setAttribute('material', 'color: red');
-            sphere1.setAttribute('position', '-5 0.5 -5');
-            sphere1.setAttribute('class', 'collectible');
-            sphere1.setAttribute('dynamic-body', '');
-            sphere1.setAttribute('collectible', '');
-            scene.appendChild(sphere1);
-
-
-             const sphere2 = document.createElement('a-entity');
-            sphere2.setAttribute('id', 'sphere2');
-            sphere2.setAttribute('geometry', 'primitive: sphere; radius: 0.5');
-            sphere2.setAttribute('material', 'color: blue');
-            sphere2.setAttribute('position', '5 0.5 5');
-             sphere2.setAttribute('class', 'collectible');
-            sphere2.setAttribute('dynamic-body', '');
-             sphere2.setAttribute('collectible', '');
-           scene.appendChild(sphere2);
-
-
-             const sphere3 = document.createElement('a-entity');
-            sphere3.setAttribute('id', 'sphere3');
-            sphere3.setAttribute('geometry', 'primitive: sphere; radius: 0.5');
-            sphere3.setAttribute('material', 'color: green');
-            sphere3.setAttribute('position', '0 0.5 10');
-             sphere3.setAttribute('class', 'collectible');
-            sphere3.setAttribute('dynamic-body', '');
-             sphere3.setAttribute('collectible', '');
-           scene.appendChild(sphere3);
-
-
-            const cube1 = document.createElement('a-entity');
-            cube1.setAttribute('id', 'cube1');
-            cube1.setAttribute('geometry', 'primitive: box; width: 1; height: 1; depth: 1');
-            cube1.setAttribute('material', 'color: yellow');
-            cube1.setAttribute('position', '10 0.5 -10');
-            cube1.setAttribute('class', 'collectible');
-            cube1.setAttribute('dynamic-body', '');
-             cube1.setAttribute('collectible', '');
-            scene.appendChild(cube1);... const cube2 = document.createElement('a-entity');
-            cube2.setAttribute('id', 'cube2');
-             cube2.setAttribute('geometry', 'primitive: box; width: 1; height: 1; depth: 1');
-            cube2.setAttribute('material', 'color: purple');
-             cube2.setAttribute('position', '-10 0.5 10');
-            cube2.setAttribute('class', 'collectible');
-           cube2.setAttribute('dynamic-body', '');
-            cube2.setAttribute('collectible', '');
-            scene.appendChild(cube2);
-
-
-            const cube3 = document.createElement('a-entity');
-             cube3.setAttribute('id', 'cube3');
-             cube3.setAttribute('geometry', 'primitive: box; width: 1; height: 1; depth: 1');
-            cube3.setAttribute('material', 'color: orange');
-             cube3.setAttribute('position', '-15 0.5 0');
-           cube3.setAttribute('class', 'collectible');
-            cube3.setAttribute('dynamic-body', '');
-            cube3.setAttribute('collectible', '');
-            scene.appendChild(cube3);
-        }
-
-      function updateTimer() {
-        timerElement.setAttribute('text', `value: Time: ${timeLeft}; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json`);
-         if (timeLeft <= 0) {
-           clearInterval(timerInterval);
-           gameOverText.setAttribute('text', 'visible: true')
-            finalScoreText.setAttribute('text', `value: Final Score: ${score}; visible: true; color: white; align: center; width: 3; font: https://cdn.aframe.io/fonts/Roboto-msdf.json`)
-            document.querySelectorAll('.collectible').forEach(el => {
-              el.parentNode.removeChild(el);
-            });
-         } else {
-            timeLeft--;
-         }
-      }
-
-        restartButton.addEventListener('click', resetGame);
-
-        AFRAME.registerComponent('clickable', {
-            init: function () {
-                this.el.addEventListener('click', () => {
-                    this.el.emit('click');
-                });
+            function updateTimer() {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    timerElement.setAttribute('text', 'value', 'Time: ' + timeLeft);
+                } else {
+                    endGame();
+                }
             }
-         });
 
+            setInterval(updateTimer, 1000);
+        }
+    });
 
-         AFRAME.registerComponent('collectible', {
-           init: function () {
-             this.el.addEventListener('collide', (event) => {
-               if (event.detail.body.el.id === 'camera') {
-                    if (!gameStarted) {
-                       timerInterval = setInterval(updateTimer, 1000);
-                       gameStarted = true;
-                   }
-                 score += 1;
-                 scoreboard.setAttribute('text', `value: ${score}; color: white; align: center; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json`);
-                 console.log("Collected: ", this.el.id);
-                 this.el.parentNode.removeChild(this.el);
-               }
-             });
-           },
-         });
-
-
-
-       document.querySelectorAll('.collectible').forEach((el) => {
-          el.setAttribute('collectible', '');
-       });
-    </script>
+    function endGame() {
+        // Логика завершения игры
+        alert("Время вышло!");
+    }
+</script>
 </body>
 </html>
