@@ -60,9 +60,10 @@
         <a-entity id="restartButton"
             geometry="primitive: box; width: 1.5; height: 0.5; depth: 0.1"
             material="color: gray"
-            position="0 -1 -5"
+            position="0 0 -5"
             text="value: Restart; align: center; color: white; width: 2; font: https://cdn.aframe.io/fonts/Roboto-msdf.json"
-            clickable>
+            clickable="on: click"
+            visible="false">
         </a-entity>
     </a-scene>
     <script>
@@ -102,14 +103,14 @@
 
       function endGame() {
           let finalScore = parseInt(document.querySelector('#scoreboard').getAttribute('text').value.split(': ')[1]);
-          alert(`Game over! Your final score is: ${finalScore}`);
 
           // Показываем текст "Game Over" и финальный счет
           document.querySelector('#gameOverText').setAttribute('visible', true);
           document.querySelector('#finalScoreText').setAttribute('text', 'value', `Score: ${finalScore}`);
           document.querySelector('#finalScoreText').setAttribute('visible', true);
 
-          // Добавляем возможность рестарта
+          // Показываем кнопку "Restart"
+          document.querySelector('#restartButton').setAttribute('visible', true);
           document.querySelector('#restartButton').addEventListener('click', () => {
               location.reload();
           });
